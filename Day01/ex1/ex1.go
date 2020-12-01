@@ -8,10 +8,6 @@ import (
 	"strconv"
 )
 
-// struct
-// - read input file into slices of int
-//  - compare async and print result
-
 type ExpenseResport struct {
 	expeneses []int
 	name      string
@@ -24,8 +20,6 @@ func (e *ExpenseResport) ReadInput(filename string) {
 		log.Fatal(err)
 	}
 	defer file.Close()
-
-	//e.expeneses = make([]int, 0)
 
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
@@ -51,9 +45,10 @@ func (e *ExpenseResport) FindSum() (int, int, int) {
 			a := e.expeneses[i]
 			b := e.expeneses[j]
 			if a+b == 2020 {
+				prod := a * b
 				fmt.Println("The sum of ", a, " and ", b, " is 2020")
-				fmt.Println("The product is:", a*b)
-				return a, b, a * b
+				fmt.Println("The product is:", prod)
+				return a, b, prod
 			}
 		}
 	}
@@ -62,19 +57,6 @@ func (e *ExpenseResport) FindSum() (int, int, int) {
 
 func main() {
 	e := ExpenseResport{}
-
-	e.ReadInput("..//input_test1.dat")
-	_, _, prod := e.FindSum()
-	if prod != 514579 {
-		log.Fatal("Test failed")
-	}
-
-	fmt.Println("#############################")
-	fmt.Println("Test passed")
-	fmt.Println("#############################")
-
 	e.ReadInput("../input1.dat")
 	_, _, _ = e.FindSum()
-
-	fmt.Println("Done")
 }
