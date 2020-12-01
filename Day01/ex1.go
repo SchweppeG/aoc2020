@@ -45,12 +45,7 @@ func (e *ExpenseResport) ReadInput(filename string) {
 func (e *ExpenseResport) FindSum() (int, int, int) {
 	fmt.Println("Finding sum")
 	length := len(e.expeneses) - 1
-	hlength := (length / 2)
-	if length%2 != 0 {
-		hlength++
-	}
-	// only iterate half the list from 0 to hlength
-	// and check vs the other half of the list length to hlength
+
 	for i := 0; i < length; i++ {
 		for j := hlength; j < length; j++ {
 			a := e.expeneses[i]
