@@ -2,7 +2,7 @@ package main
 
 import "testing"
 
-func TestPrcessInput(t *testing.T) {
+func TestProcessInput(t *testing.T) {
 	p := PolicyChecker{}
 	p.processInput("../input_test1.dat")
 
