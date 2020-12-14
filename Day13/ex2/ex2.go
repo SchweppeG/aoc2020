@@ -51,48 +51,52 @@ func (s *Schedule) checkTime(ct uint64, d chan uint64) {
 			return
 		}
 	}
-	//log.Fatal("Found", ct)
-	//fmt.Println("--", ct)
 	d <- ct
 	close(d)
 }
 
-func (s *Schedule) earliestBus(starttime uint64) uint64 {
-
-	depart := make(chan uint64, 1)
-	//timestamps := make(chan uint64)
-	time := starttime
-	dt := uint64(s.lines[0])
-	// shift time to be mod of dt
-	if time%dt != 0 {
-		time = time - (time % dt)
+func GCD(a int, b int) int {
+	for b != 0 {
+		t := b
+		b = a % b
+		a = t
 	}
-	var ret uint64
-	running := true
+	return a
 
-	//go s.makeTimestamps(timestamps, time, dt)
-	for running {
-		select {
-		case x, _ := <-depart:
-			ret = x
-			running = false
-			break
-		default:
-			go s.checkTime(time, depart)
-		}
-		time += dt
+}
+
+func LCM(a int, b int, values ...int) int {
+	result := a * b / GCD(a, b)
+
+	for i := 0; i < len(values); i++ {
+		result = LCM(result, values[i])
 	}
+	return result
+}
+
+func (s *Schedule) earliestBus(starttime uint64) int {
+
+	var tmp []int
+	for i := range s.lines {
+		tmp = append(tmp, s.lines[i]-s.offset[i])
+	}
+	fmt.Println(tmp)
+	fmt.Println(s.lines[0])
+	fmt.Println(s.offset[1])
+	fmt.Println(s.offset[2:])
+	ret := LCM(s.lines[0], s.offset[1], s.offset[2:]...)
 
 	return ret
 }
 
 func main() {
 	s := Schedule{}
-	s.readSchedule("../input1.dat")
+	s.readSchedule("../input_test1.dat")
 	fmt.Println(s.lines)
 	fmt.Println(s.offset)
 	fmt.Println("#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#")
-	fmt.Printf("Depatrue time is %d\n", s.earliestBus(100000000000000))
+	fmt.Printf("Depatrue time is %d\n", s.earliestBus(100000))
+	//fmt.Printf("Depatrue time is %d\n", s.earliestBus(100000000000000))
 	fmt.Println("#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#")
 	//line, time := s.earliestBus()
 	//fmt.Println("ID multiplied by minutes: ", line*time)
